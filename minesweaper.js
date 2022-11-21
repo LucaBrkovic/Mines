@@ -1,7 +1,7 @@
 // Game Logic
 
 // status of the game classes in the css 
-const TILE_STATUSES = {
+export const TILE_STATUSES = {
     HIDDEN : "hidden",
     MINE: "mine",
     NUMBER: "number",
@@ -11,7 +11,6 @@ const TILE_STATUSES = {
 export function createBoard(boardSize, numberOfMines) {
     const board = []
     const minePositions = getMinePositions(boardSize, numberOfMines)
-    console.log(minePositions)
     for (let x = 0; x <boardSize; x++) {
         const row = []
         for(let y = 0; y <boardSize; y++){
