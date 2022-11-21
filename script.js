@@ -1,5 +1,5 @@
 // display/UI 
-import { TILE_STATUSES, createBoard, markTile } from "./minesweaper.js";
+import { TILE_STATUSES, createBoard, markTile, revealTile } from "./minesweaper.js";
 // 1. Populate a board with mines 
 const BOARD_SIZE = 10
 const NUMBER_OF_MINES = 10
@@ -16,7 +16,7 @@ board.forEach(row => {
         boardElement.append(tile.element)
         //2 for left clicks
         tile.element.addEventListener("click", () => {
-
+          revealTile(board, tile)
         })
         //3 for right clicks
         // preventDefault() prevent default behavior of the right click
