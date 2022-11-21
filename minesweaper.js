@@ -97,7 +97,7 @@ tile.status = TILE_STATUSES.NUMBER
 const adjecentTiles = nearbyTiles(board, tile)
 const mines = adjecentTiles.filter(t => t.mine)
 if(mines.length === 0 ) {
-
+adjecentTiles.forEach(revealTile.bind(null, board))
 } else {
   tile.element.textContent = mines.length
 }
@@ -116,4 +116,25 @@ for (let xOffset = -1; xOffset <= 1; xOffset++) {
 }
 
 return tiles
+}
+
+export function checkWin(board) {
+  return board.every(row => {
+    return row.every(tile => {
+      return (
+        tile.status === TILE_STATUSES.NUMBER ||
+        (tile.mine &&
+          (tile.status === TILE_STATUSES.HIDDEN ||
+            tile.status === TILE_STATUSES.MARKED))
+      )
+    })
+  })
+}
+
+export function checkLose(board) {
+  return board.some(row => {
+    return row.some(tile => {
+      return tile.status === TILE_STATUSES.MINE
+    })
+  })
 }

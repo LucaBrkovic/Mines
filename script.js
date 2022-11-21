@@ -1,5 +1,5 @@
 // display/UI 
-import { TILE_STATUSES, createBoard, markTile, revealTile } from "./minesweaper.js";
+import { TILE_STATUSES, createBoard, markTile, revealTile, checkLose, checkWin } from "./minesweaper.js";
 // 1. Populate a board with mines 
 const BOARD_SIZE = 10
 const NUMBER_OF_MINES = 10
@@ -8,7 +8,7 @@ const NUMBER_OF_MINES = 10
 const board = (createBoard(BOARD_SIZE, NUMBER_OF_MINES))
 const boardElement  = document.querySelector(".board")
 const minesLeftText = document.querySelector("[data-mine-count]")
-
+const messageText = document.querySelector(".subtext")
 
 
 board.forEach(row => {
@@ -17,6 +17,7 @@ board.forEach(row => {
         //2 for left clicks
         tile.element.addEventListener("click", () => {
           revealTile(board, tile)
+          checkGameEnd()
         })
         //3 for right clicks
         // preventDefault() prevent default behavior of the right click
@@ -39,8 +40,31 @@ function listMinesLeft() {
   
     minesLeftText.textContent = NUMBER_OF_MINES - markedTilesCount
   }
-    // a. reavel tiles
+// check for win/lose 
+  function checkGameEnd() {
+    const win = checkWin(board)
+    const lose = checkLose(board)
 
-    // b. mark tiles
-// 4. check for win/lose 
+    if( win || lose) {
+      boardElement.addEventListener("click", stopProp, {capture: true})
+      boardElement.addEventListener("contextmenu", stopProp, {capture: true})
+    }
+    if(win) {
+      messageText.textContent = "You Win"
+    } 
+    if (lose) {
+      messageText.textContent = "You Lose"
+      board.forEach(row => {
+        row.forEach(tile => {
+          if(tile.status === TILE_STATUSES.MARKED) markTile(tile)
+          if(tile.mine) revealTile(board, tile)
+        })
+      })
 
+    }
+  }
+
+
+function stopProp (e) {
+  e.stopImmediatePropagation()
+}
